@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.w3.org/1000/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:action="@{/newUser}" method="post">
+    <h1>Register</h1>
+    <label for="email"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="username" id="username" required><br/>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" name="email" id="email" required><br/>
+
+    <label for="email"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="password" id="password" required><br/>
+
+    <button type="submit">Register</button>
+
+</form>
+</body>
+</html>
