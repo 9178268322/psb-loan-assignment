@@ -53,4 +53,9 @@ public class ProductServiceImpl implements ProductService {
         Product finalProduct = product.get();
         productRepository.delete(finalProduct);
     }
+
+    @Override
+    public List<Product> getAllProdcutsByNameAsc() {
+        return productRepository.findAllByOrderByNameAsc();
+    }
 }

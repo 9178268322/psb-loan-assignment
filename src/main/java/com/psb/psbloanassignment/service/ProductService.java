@@ -12,5 +12,6 @@ public interface ProductService {
     public Product getProduct(Long id);
     public Product updateProduct(Product product, Long id);
     public void deleteProduct(Long id);
+    public List<Product> getAllProdcutsByNameAsc();
 
 }

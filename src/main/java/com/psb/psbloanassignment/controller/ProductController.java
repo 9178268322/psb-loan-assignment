@@ -3,12 +3,13 @@ package com.psb.psbloanassignment.controller;
 import com.psb.psbloanassignment.model.Product;
 import com.psb.psbloanassignment.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/api")
 public class ProductController {
 
@@ -16,28 +17,40 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/products")
-    public List<Product> getProducts() {
-        return productService.getAllProducts();
+    public String getProducts(Model model) {
+        List<Product> productList = productService.getAllProdcutsByNameAsc();
+        model.addAttribute("products", productList);
+        return "list-products";
     }
 
+    @GetMapping("/showFormForAdd")
+    public String showFormForAdd(Model model) {
+        Product product = new Product();
+        model.addAttribute("product", product);
+        return "product-form";
+    }
+
+    @GetMapping("/showFormForUpdate")
+    public String showFormForUpdate(@RequestParam("id") Long id, Model model) {
+        Product product = productService.getProduct(id);
+        model.addAttribute("product", product);
+        return "product-form";
+    }
     @GetMapping("/products/{productId}")
     public Product getProduct(@PathVariable Long productId) {
         return productService.getProduct(productId);
     }
 
     @PostMapping("/products")
-    public Product addProduct(@RequestBody Product product) {
-        return productService.addProduct(product);
+    public String addProduct(@ModelAttribute("product") Product product) {
+        productService.addProduct(product);
+        return "redirect:/api/products";
     }
 
-    @DeleteMapping("/products/{productId}")
-    public void deleteProduct(@PathVariable Long productId) {
-        productService.getProduct(productId);
-    }
-
-    @PutMapping("/products/{productId}")
-    public Product updateProduct(@RequestBody Product product, Long productId) {
-        return productService.updateProduct(product, productId);
+    @GetMapping("/delete")
+    public String deleteProduct(@RequestParam("id") Long id) {
+        productService.deleteProduct(id);
+        return "redirect:/api/products";
     }
 
 }
