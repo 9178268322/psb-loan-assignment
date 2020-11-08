@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1000/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Home Page</title>
+
+    <head th:replace="common/header :: common-header" />
+
 </head>
 <body>
-<a th:href="@{/login}">Login</a>
-<a th:href="@{/registration}">Register</a>
+<div th:replace="common/header :: navbar"/>
+
+<div class="container">
+    <a th:href="@{/api/products}">Click here to see product list</a>
+</div>
+
 </body>
 </html>

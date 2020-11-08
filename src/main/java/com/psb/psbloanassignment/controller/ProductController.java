@@ -3,6 +3,7 @@ package com.psb.psbloanassignment.controller;
 import com.psb.psbloanassignment.model.Product;
 import com.psb.psbloanassignment.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,26 @@ public class ProductController {
 
     @GetMapping("/products")
     public String getProducts(Model model) {
-        List<Product> productList = productService.getAllProdcutsByNameAsc();
+        return findPaginated(1, "name", "asc", model);
+    }
+
+    @GetMapping("/products/page")
+    public String findPaginated(@RequestParam("pageNo") int pageNo,
+                                @RequestParam("sortField") String sortField,
+                                @RequestParam("sortDir") String sortDir,
+                                 Model model) {
+        int pageSize = 5;
+        Page<Product> page = productService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        List<Product> productList = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
         model.addAttribute("products", productList);
         return "list-products";
     }
@@ -36,9 +56,11 @@ public class ProductController {
         model.addAttribute("product", product);
         return "product-form";
     }
-    @GetMapping("/products/{productId}")
-    public Product getProduct(@PathVariable Long productId) {
-        return productService.getProduct(productId);
+    @GetMapping("/search")
+    public String getProductByName(@RequestParam("name") String name, Model model) {
+        List<Product> productList = productService.searchProductByName(name);
+        model.addAttribute("products", productList);
+        return "list-products";
     }
 
     @PostMapping("/products")
@@ -52,5 +74,6 @@ public class ProductController {
         productService.deleteProduct(id);
         return "redirect:/api/products";
     }
+
 
 }

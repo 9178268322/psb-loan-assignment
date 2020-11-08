@@ -2,63 +2,52 @@ package com.psb.psbloanassignment.controller;
 
 import com.psb.psbloanassignment.model.User;
 import com.psb.psbloanassignment.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/register")
 public class UserController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/")
-    public String home() {
-        return "home";
+    @GetMapping("/showRegistrationForm")
+    public String showRegisterForm(Model model) {
+        model.addAttribute("user", new User());
+        return "registration-form";
     }
 
-    @RequestMapping("/login")
-    public String login() {
-        return "login";
+    @PostMapping("/processRegistrationForm")
+    public String newUserRegister(@ModelAttribute("user") User user, Model model) throws Exception {
+            String userName = user.getUsername();
+            LOGGER.info("Processing registration form for: " + userName);
+
+            if (userService.findByUsername(userName) != null) {
+                model.addAttribute("userNameExists", true);
+
+                LOGGER.warn("User name already exists.");
+                return "registration-form";
+            }
+
+            if (userService.findByEmail(user.getEmail()) != null) {
+                model.addAttribute("emailExists", true);
+                return "registration-form";
+            }
+
+            userService.save(user);
+
+            LOGGER.info("Successfully created user: " + userName);
+
+            return "registration-confirmation";
     }
-
-    @RequestMapping("/registration")
-    public String register() {
-        return "registration";
-    }
-
-    @PostMapping("/userLogin")
-    public String loginUser(@ModelAttribute("username") String username, @ModelAttribute("password") String password) {
-        User user = userService.findByUsername(username);
-        if (user != null) {
-            return "productPage";
-        }
-        return "userError";
-    }
-
-    @PostMapping("/newUser")
-    public String newUserPost(@ModelAttribute("email") String userEmail,
-                @ModelAttribute("username") String username,
-                @ModelAttribute("password") String password,
-                Model model) throws Exception {
-
-            model.addAttribute("email", userEmail);
-            model.addAttribute("username", username);
-            model.addAttribute("password", password);
-
-
-            User user = new User();
-            user.setUsername(username);
-            user.setEmail(userEmail);
-            user.setPassword(password);
-
-            userService.createUser(user);
-
-            return "login";
-    }
-
-
 }

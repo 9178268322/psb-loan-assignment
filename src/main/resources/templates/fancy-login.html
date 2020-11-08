@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" >
+
+<head th:replace="common/header :: common-header" />
+
+<body>
+<div>
+    <div id="loginbox" style="margin-top: 50px; margin-left: 500px;"
+         class="mainbox col-md-3 col-md-offset-100 col-sm-6 col-sm-offset-2">
+
+        <div class="panel panel-info">
+
+            <div class="panel-heading">
+                <div class="panel-title">Sign in</div>
+            </div>
+
+            <div style="padding-top: 30px" class="panel-body">
+
+                <!-- Login Form -->
+                <form th:action="@{/login}" method="post" class="form-horizontal">
+
+                    <!-- Place for messages: error, alert etc ... -->
+                    <div class="form-group">
+                        <div class="col-xs-15">
+                            <div>
+
+                                <!-- Check for login error -->
+
+                                <div th:if="${param.error}">
+
+                                    <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                                        Invalid username and password.
+                                    </div>
+
+                                </div>
+
+                                <!-- Check for logout -->
+
+                                <div th:if="${param.logout}">
+
+                                    <div class="alert alert-success col-xs-offset-1 col-xs-10">
+                                        You have been logged out.
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User name -->
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+
+                        <input type="text" name="username" id="username" required="required" placeholder="username" class="form-control"/>
+                    </div>
+
+                    <!-- Password -->
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+
+                        <input type="password" name="password" id="password" required="required" placeholder="password" class="form-control" />
+                    </div>
+
+                    <!-- Login/Submit Button -->
+                    <div style="margin-top: 10px" class="form-group">
+                        <div class="col-sm-6 controls">
+                            <button type="submit" class="btn btn-success">Login</button>
+                        </div>
+
+                        <!--Register link-->
+                        <div style="margin-top: 10px;">
+                                <p>New user? <a th:href="@{register/showRegistrationForm}">Register</a>.</p>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

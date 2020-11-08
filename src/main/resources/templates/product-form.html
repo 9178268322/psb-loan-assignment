@@ -8,10 +8,11 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-    <title>Save Employee</title>
+    <title>Save Product</title>
 </head>
 <body>
-<div class="container">
+<div th:replace="common/header :: navbar"/>
+<div class="container" style="margin-top: 70px">
 
     <h3>Product Directory</h3>
     <hr>
@@ -25,10 +26,10 @@
         <input type="hidden" th:field="*{id}"/>
 
         <input type="text" th:field="*{name}"
-               class="form-control mb-4 col-4" placeholder="Product name">
+               class="form-control mb-4 col-4" name="name" id="name" required="required" placeholder="Product name">
 
         <input type="text" th:field="*{price}"
-               class="form-control mb-4 col-4" placeholder="Product price">
+               class="form-control mb-4 col-4" name="price" id="price" required="required" placeholder="Product price">
 
 
         <button type="submit" class="btn btn-info col-2">Save</button>

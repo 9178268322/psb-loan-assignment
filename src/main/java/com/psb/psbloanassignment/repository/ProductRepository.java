@@ -9,5 +9,9 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    // add a method to sort by product name in ascending order
     public List<Product> findAllByOrderByNameAsc();
+
+    //add a method to serach product by name
+    public List<Product> findByNameContainsAllIgnoreCase(String name);
 }
